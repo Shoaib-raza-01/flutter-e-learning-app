@@ -1,5 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jsdc/utils/google_files.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,7 +15,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _loginFormKey = GlobalKey<FormState>();
-
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool _showPassword = false;
 
   void _toggleVisibility() {
@@ -21,13 +27,24 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(
+              height: 90,
+              width: 90,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Colors.blue.withOpacity(0.7),
+                  Colors.purple.shade50.withOpacity(0.3)
+                ], begin: const Alignment(-1, -1), end: const Alignment(1, 1)),
+              ),
+              child: const Image(
+                  image: AssetImage('assets/images/google_logo.png')),
+            ),
             //appname and descr
             const SizedBox(
               height: 50,
@@ -191,6 +208,11 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20)),
                       hintText: "Enter Your Email",
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) 'Email is required';
+                      return null;
+                    },
+                    controller: emailController,
                     obscureText: false,
                   ),
                 ),
@@ -214,13 +236,31 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20)),
                       hintText: "Enter Password",
                     ),
+                    controller: passwordController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
                     obscureText: !_showPassword,
                   ),
                 ),
                 ElevatedButton(
                     child: const Text("Log In"),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/home');
+                      try {
+                        if (emailController.text == "" ||
+                            passwordController.text == "") {
+                          print("fill");
+                        }
+                        FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim()
+                        ).then((value) => Navigator.of(context).pushNamed("/home"));
+                      } catch (err) {
+                        print('Error in Login $err}');
+                      }
                     })
               ]),
             ),
@@ -230,57 +270,76 @@ class _LoginPageState extends State<LoginPage> {
               height: 150,
               child: Column(
                 children: [
-                  Container(
-                    height: 50,
-                    width: 250,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: const Color.fromARGB(255, 0, 0, 0)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              "https://www.telefonkonferenz.de/blog/wp-content/uploads/2017/08/google-app-logo.png",
-                              height: 35,
-                            ),
-                            const SizedBox(width: 10),
-                            const Text(
-                              "Login Using Google",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(255, 255, 255, 255)),
-                            ),
-                          ]),
+                  InkWell(
+                    onTap: () {
+                      final provider =
+                          Provider.of<GoogleAuthClass>(context, listen: false);
+                      provider.googleLogin().then((value) {
+                        Navigator.pushNamed(context, '/home');
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 250,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color.fromARGB(255, 87, 199, 233)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Image(
+                                image:
+                                    AssetImage('assets/images/google_logo.png'),
+                                height: 30,
+                                width: 30,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Login Using Google",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 255, 255, 255)),
+                              ),
+                            ]),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    height: 50,
-                    width: 250,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: const Color.fromARGB(255, 0, 0, 0)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              "https://cdn1.iconfinder.com/data/icons/smartphone-signal-5g-trading/64/Smartphone_Verification_001-512.png",
-                              height: 35,
-                            ),
-                            const SizedBox(width: 10),
-                            const Text(
-                              "Continue With Number",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(255, 255, 255, 255)),
-                            ),
-                          ]),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/phone');
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 250,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color.fromARGB(255, 87, 199, 233)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Image(
+                                image: AssetImage(
+                                  'assets/images/ph_logo.png',
+                                ),
+                                height: 30,
+                                width: 30,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Continue With Number",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 255, 255, 255)),
+                              ),
+                            ]),
+                      ),
                     ),
                   ),
                 ],
@@ -289,26 +348,56 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 40),
 
             //text to register a user
-            SizedBox(
-              // color: Colors.amber,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/register');
-                },
-                child: const Text.rich(TextSpan(children: [
-                  TextSpan(
-                      text: "Don't have an account?",
-                      style: TextStyle(color: Colors.black54)),
-                  TextSpan(
-                      text: "    Register",
+            Padding(
+              padding: const EdgeInsets.only(left: 25),
+              child: Row(
+                children: [
+                  const Text(
+                    "Don't have an account?",
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    child: const Text(
+                      " Register ",
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13))
-                ])),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                  )
+                ],
               ),
             ),
+            // SizedBox(
+            //   // color: Colors.amber,
+            //   child: InkWell(
+            //     onTap: () {
+            //       Navigator.pushNamed(context, '/register');
+            //     },
+            //     child: const Text.rich(TextSpan(children: [
+            //       TextSpan(
+            //           text: "Don't have an account?",
+            //           style: TextStyle(color: Colors.black54)),
+            //       TextSpan(
+            //           text: "    Register",
+            //           style:
+            //               TextStyle(fontWeight: FontWeight.bold, fontSize: 13))
+            //     ])),
+            //   ),
+            // ),
           ],
         ),
       ),
-    ));
+    );
   }
+
+  // void signInAnonymously() async {
+  //   try {
+  //     final anonymousUser = await FirebaseAuth.instance.signInAnonymously();
+  //     print(anonymousUser.user!.uid);
+  //   } catch (e) {
+  //     print("Error signing in anonymously ${e.toString()}");
+  //   }
+  // }
 }
