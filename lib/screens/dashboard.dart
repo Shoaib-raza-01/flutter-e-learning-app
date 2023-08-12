@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jsdc/components/category_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,12 +25,10 @@ class _HomePageState extends State<HomePage> {
             IconButton(
                 icon: const Icon(Icons.notifications),
                 onPressed: () async {
-                  Navigator.pushNamed(context,'/notify');
+                  Navigator.pushNamed(context, '/notify');
                 }),
           ],
-          title: const Center( 
-            child: Text("IQRA")
-          ),
+          title: const Center(child: Text("IQRA")),
           elevation: 0,
         ),
         drawer: Drawer(
@@ -147,30 +146,48 @@ class _HomePageState extends State<HomePage> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 SizedBox(
                                   height: 40,
-                                  child: Card(
-                                    child: Center(
-                                        child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                      child: Text("Core Java(1)"),
-                                    )),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(
+                                              MaterialPageRoute(
+                                        builder: (context) => const CategoryScreen(text: "core Java")
+                                      ));
+                                    },
+                                    child: const Card(
+                                      child: Center(
+                                          child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        child: Text("Core Java(1)"),
+                                      )),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(
+                                 SizedBox(
                                   height: 40,
-                                  child: Card(
-                                    child: Center(
-                                        child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                      child: Text("Advanced Java(2)"),
-                                    )),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(
+                                              MaterialPageRoute(
+                                        builder: (context) => const CategoryScreen(text: "Advanced Java")
+                                      ));
+                                    },
+                                    child: const Card(
+                                      child: Center(
+                                          child: Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                        child: Text("Advanced Java(2)"),
+                                      )),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 40,
                                   child: Card(
                                     child: Center(
@@ -181,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                                     )),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 40,
                                   child: Card(
                                     child: Center(

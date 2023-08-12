@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:jsdc/components/category_widget.dart';
 import 'package:jsdc/screens/dashboard.dart';
 import 'package:jsdc/screens/login_page.dart';
 import 'package:jsdc/screens/notification_page.dart';
