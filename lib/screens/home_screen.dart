@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jsdc/components/course_widget.dart';
+import 'package:jsdc/components/course_card.dart';
 
 import '../components/category_widget.dart';
 
@@ -11,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+      
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,16 +121,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // popular courses text and card.
-            Container(
-              height: 600,
+            const SizedBox(
+              height: 500,
               width: double.infinity,
-              color: const Color.fromARGB(255, 222, 222, 222),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, top: 20),
+              child:  Padding(
+                padding: EdgeInsets.only(left: 15, top: 20),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Popular Courses",
                         style: TextStyle(
                           fontSize: 20,
@@ -138,127 +139,91 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
 
                       //card
-
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: SizedBox(
-                          height: 480,
-                          width: 330,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15))),
-                                  width: 350,
-                                  height: 200,
-                                  child: Image.asset(
-                                    'assets/images/loginScreen.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: const <Widget>[
-                                        SizedBox(
-                                          height: 25,
-                                          child: Card(
-                                            child: Center(
-                                                child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 14, right: 14),
-                                              child: Text(
-                                                "LIVE CLASS",
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                            )),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 25,
-                                          child: Card(
-                                            child: Center(
-                                                child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 14, right: 14),
-                                              child: Text(
-                                                "FREE CONTENT",
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                            )),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 25,
-                                          child: Card(
-                                            child: Center(
-                                                child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 14, right: 14),
-                                              child: Text(
-                                                "FILES",
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                            )),
-                                          ),
-                                        ),
-                                      ]),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 20.0, top: 10),
-                                  child: Text(
-                                    "Complete Core Java",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 20, top: 70),
-                                  child: Text(
-                                    "Rs 200",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Container(
-                                    color: const Color.fromARGB(
-                                        255, 213, 213, 213),
-                                    height: 1,
-                                  ),
-                                ),
-                                Center(
-                                  child: SizedBox(
-                                    height: 30,
-                                    width: 250,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(context,MaterialPageRoute(builder: (context)=>const BuyCoursePage()));
-                                        },
-                                        child: const Text("Get This Course")),
-                                  ),
-                                )
-                              ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            CourseCard(
+                              title: 'Complete Core Java',
+                              price: 200,
+                              courseRef: '/core-java',
                             ),
-                          ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            CourseCard(
+                              title: 'Python Programming',
+                              price: 250,
+                              courseRef: '/Python',
+                              img: "",
+                            ),
+                          ],
                         ),
-                      ),
+                      )
                     ]),
               ),
             ),
 
             //share tour experience
-            Container(
-              color: Colors.brown.shade100,
-              height: 200,
+            SizedBox(
+              height: 170,
               width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: (MediaQuery.of(context).size.width / 2) - 10,
+                      height: 170,
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 10.0),
+                            child: Text(
+                              "Share Your Experience",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              "Give your tutor a smile by sharing your experience",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 14),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 150,
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 215, 215, 215),
+                                    foregroundColor: Colors.black),
+                                child: const Text("Write Now")),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width / 2) - 10,
+                    height: 170,
+                    child: Image.asset('assets/images/rating.png'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

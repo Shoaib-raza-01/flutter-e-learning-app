@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jsdc/screens/chat.dart';
 import 'package:jsdc/screens/course_screen.dart';
 import 'package:jsdc/screens/home_screen.dart';
 import 'package:jsdc/screens/profile_screen.dart';
@@ -18,13 +19,26 @@ class _HomePageState extends State<HomePage> {
   List<Widget> widgetList = const [
     HomeScreen(),
     CourseScreen(),
-    ProfileScreen()
+    ChatWithUs(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 207, 203, 190),
+        // action button
+        // floatingActionButton: FloatingActionButton.extended(
+        //   label: Text("hi"),
+        //   onPressed: () {
+        //     print("object");
+        //   },
+        //   icon: Icon(Icons.bolt_rounded),
+        //   backgroundColor: Color.fromARGB(255, 93, 166, 218),
+        //   // child: const Icon(Icons.waving_hand),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
@@ -119,11 +133,14 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body:IndexedStack(
-          index:index,
-          children: widgetList,),
+        body: IndexedStack(
+          index: index,
+          children: widgetList,
+        ),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: index,
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
             onTap: (value) {
               setState(() {
                 index = value;
@@ -137,6 +154,10 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.menu_book_rounded),
                 label: "Course",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.chat),
+                label: 'Chats',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),

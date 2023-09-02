@@ -72,11 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10)),
                     color: const Color.fromARGB(255, 216, 223, 229),
                     shadowColor: Colors.black87,
-                    child: Center(
+                    child: const Center(
                         child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Column(
-                        children: const [
+                        children: [
                           Text(
                             '''“Live as if you were to die tomorrow. Learn as if you were to live forever.”''',
                             style: TextStyle(
@@ -101,11 +101,11 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10)),
                     color: const Color.fromARGB(255, 216, 223, 229),
                     shadowColor: Colors.black87,
-                    child: Center(
+                    child: const Center(
                         child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Column(
-                        children: const [
+                        children: [
                           Text(
                             '''“The past has no power over the present moment.”''',
                             style: TextStyle(
@@ -130,11 +130,11 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10)),
                     color: const Color.fromARGB(255, 216, 223, 229),
                     shadowColor: Colors.black87,
-                    child: Center(
+                    child: const Center(
                         child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Column(
-                        children: const [
+                        children: [
                           Text(
                             '''“The mind is not a vessel to be filled, but a fire to be kindled.”''',
                             style: TextStyle(
@@ -159,11 +159,11 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10)),
                     color: const Color.fromARGB(255, 216, 223, 229),
                     shadowColor: Colors.black87,
-                    child: Center(
+                    child: const Center(
                         child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Column(
-                        children: const [
+                        children: [
                           Text(
                             '''“It does not matter how slowly you go as long as you do not stop.”''',
                             style: TextStyle(
@@ -282,12 +282,12 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: const Color.fromARGB(255, 87, 199, 233)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Image(
                                 image:
                                     AssetImage('assets/images/google_logo.png'),
@@ -316,12 +316,12 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: const Color.fromARGB(255, 87, 199, 233)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Image(
                                 image: AssetImage(
                                   'assets/images/ph_logo.png',
