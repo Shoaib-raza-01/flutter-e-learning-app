@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -21,30 +24,38 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) =>ChangeNotifierProvider(
-    create: (context) =>  GoogleAuthClass(),
-    child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData
-      (
-        primarySwatch: Colors.blue,
-      ),
-      home: FirebaseAuth.instance.currentUser != null ? const HomePage() : const LoginPage(),
-      // initialRoute: "/login",
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/home': (context) => const HomePage(),
-        '/phone' : (context) => const PhoneScreen(),
-        '/otp' : (context) => const OTPScreen(),
-        '/notify' :(context)=> const NotificationScreen(),
-        '/chat' :(context) => const ChatWithUs(),
-      },
-    ),
-    );
-  
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => GoogleAuthClass(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: FirebaseAuth.instance.currentUser != null
+              ? const HomePage()
+              : const LoginPage(),
+          // initialRoute: "/login",
+          routes: {
+            '/login': (context) => const LoginPage(),
+            '/register': (context) => const RegisterPage(),
+            '/home': (context) => const HomePage(),
+            '/phone': (context) => const PhoneScreen(),
+            '/otp': (context) => const OTPScreen(),
+            '/notify': (context) => const NotificationScreen(),
+            '/chat': (context) => const ChatWithUs(),
+          },
+        ),
+      );
 }
-
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+// class MyHttpOverrides extens
 // class SplashScreen extends StatefulWidget {
 //   const SplashScreen({super.key});
 

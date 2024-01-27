@@ -19,10 +19,13 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
-      child: Flexible(
+      child: SizedBox(
         // height: 480,
-        // width: 330,
+        // color: Colors.black12,
+        width: 285,
         child: Card(
+          color: Color.fromARGB(255, 207, 206, 202),
+          // elevation: 10,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Column(
@@ -41,14 +44,18 @@ class CourseCard extends StatelessWidget {
                         .doc(courseRef)
                         .snapshots(),
                     builder: (context, snapshot) {
-                      var docSnap = snapshot.data ;
-                      return Image.network(
+                      try{
+                        var docSnap = snapshot.data;
+                        return Image.network(
                         docSnap!['img'],
                       );
+                      }catch(e){
+                        return const CircularProgressIndicator();
+                      }
                     }),
               ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
@@ -57,12 +64,12 @@ class CourseCard extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             gradient: LinearGradient(colors: [
-                              Color.fromARGB(179, 221, 34, 231)
+                              const Color.fromARGB(179, 221, 34, 231)
                                   .withOpacity(0.3),
-                              Color.fromARGB(255, 180, 132, 204)
+                              const Color.fromARGB(255, 180, 132, 204)
                                   .withOpacity(0.7),
                             ])),
-                        child: Center(
+                        child: const Center(
                             child: Padding(
                           padding: EdgeInsets.only(left: 14, right: 14),
                           child: Text(
@@ -79,12 +86,12 @@ class CourseCard extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             gradient: LinearGradient(colors: [
-                              Color.fromARGB(179, 221, 34, 231)
+                              const Color.fromARGB(179, 221, 34, 231)
                                   .withOpacity(0.3),
-                              Color.fromARGB(255, 180, 132, 204)
+                              const Color.fromARGB(255, 180, 132, 204)
                                   .withOpacity(0.7),
                             ])),
-                        child: Center(
+                        child: const Center(
                             child: Padding(
                           padding: EdgeInsets.only(left: 14, right: 14),
                           child: Text(
@@ -101,12 +108,12 @@ class CourseCard extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             gradient: LinearGradient(colors: [
-                              Color.fromARGB(179, 221, 34, 231)
+                              const Color.fromARGB(179, 221, 34, 231)
                                   .withOpacity(0.3),
-                              Color.fromARGB(255, 180, 132, 204)
+                              const Color.fromARGB(255, 180, 132, 204)
                                   .withOpacity(0.7),
                             ])),
-                        child: Center(
+                        child: const Center(
                             child: Padding(
                           padding: EdgeInsets.only(left: 14, right: 14),
                           child: Text(
@@ -133,11 +140,15 @@ class CourseCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 40, right: 40,bottom: 20),
+                padding: const EdgeInsets.only(
+                    top: 10, left: 40, right: 40, bottom: 20),
                 child: SizedBox(
                   height: 40,
                   width: 280,
                   child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(179, 255, 179, 254)
+                      ),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -145,7 +156,7 @@ class CourseCard extends StatelessWidget {
                                 builder: (context) => BuyCoursePage(
                                     storageRef: courseRef, appbar: title)));
                       },
-                      child: const Text("Get This Course")),
+                      child: const Text("Get This Course",style: TextStyle(color: Colors.black),)),
                 ),
               )
             ],

@@ -3,13 +3,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:jsdc/components/custom_alert_dialog.dart';
+import 'package:jsdc/utils/keys.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class BuyCoursePage extends StatefulWidget {
   final String storageRef;
   final String appbar;
-  const BuyCoursePage({super.key, required this.storageRef, required this.appbar});
+  const BuyCoursePage(
+      {super.key, required this.storageRef, required this.appbar});
 
   @override
   State<BuyCoursePage> createState() => _BuyCoursePageState();
@@ -18,10 +22,11 @@ class BuyCoursePage extends StatefulWidget {
 class _BuyCoursePageState extends State<BuyCoursePage> {
   late Future<ListResult> coreJavaFiles;
 
-  // FirebaseFirestore about =
+  late bool haveBuyed;
   @override
   void initState() {
     super.initState();
+    haveBuyed = false;
     coreJavaFiles = FirebaseStorage.instance.ref(widget.storageRef).listAll();
   }
 
@@ -179,18 +184,42 @@ class _BuyCoursePageState extends State<BuyCoursePage> {
                                       .doc(widget.storageRef)
                                       .snapshots(),
                                   builder: (context, snapshot) {
-                                    DocumentSnapshot docSnap = snapshot.data!;
-                                    return Text(
-                                      docSnap['about'],
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 5,
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 15,
-                                        wordSpacing: 1.5,
-                                        letterSpacing: .4,
-                                      ),
-                                    );
+                                    try {
+                                      DocumentSnapshot docSnap = snapshot.data!;
+                                      return Text(
+                                        docSnap['about'],
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 5,
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 15,
+                                          wordSpacing: 1.5,
+                                          letterSpacing: .4,
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      return AlertDialog(
+                                        title: const Text('AlertDialog Title'),
+                                        content: const SingleChildScrollView(
+                                          child: ListBody(
+                                            children: <Widget>[
+                                              Text(
+                                                  'This is a demo alert dialog.'),
+                                              Text(
+                                                  'Would you like to approve of this message?'),
+                                            ],
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: const Text('Approve'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }
                                   }),
 
                               //validity and learning
@@ -635,49 +664,130 @@ class _BuyCoursePageState extends State<BuyCoursePage> {
             Expanded(
               flex: 1,
               child: Container(
-                width: double.infinity,
-                height: 80,
-                color: const Color.fromARGB(255, 3, 20, 34),
-                child: Row(children: [
-                  const Expanded(
-                    flex: 5,
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.only(
-                        start: 20,
-                      ),
-                      child: Text(
-                        "Price",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: SizedBox(
-                        height: 40,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color.fromARGB(255, 2, 57, 167))),
-                          onPressed: () {},
-                          child: const Text(
-                            "Buy Now",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.right,
+                  width: double.infinity,
+                  height: 80,
+                  color: const Color.fromARGB(255, 3, 20, 34),
+                  child: (haveBuyed == false)
+                      ? Row(children: [
+                          const Expanded(
+                            flex: 5,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.only(
+                                start: 20,
+                              ),
+                              child: Text(
+                                "Price",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: SizedBox(
+                                height: 40,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              const Color.fromARGB(
+                                                  255, 2, 57, 167))),
+                                  onPressed: () {
+                                    Razorpay razorpay = Razorpay();
+                                    var options = {
+                                      'key': APIKey.razorpayApiKey,
+                                      'amount': 205 * 100,
+                                      'name': 'Acme Corp.',
+                                      'description': 'Fine T-Shirt',
+                                      'retry': {
+                                        'enabled': true,
+                                        'max_count': 1
+                                      },
+                                      'send_sms_hash': true,
+                                      'prefill': {
+                                        'contact': '7209602458',
+                                        'email': 'test@razorpay.com'
+                                      },
+                                      // 'external': {
+                                      //   'wallets': ['paytm','gpay','phonePe]
+                                      // }
+                                    };
+                                    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                                        handlePaymentErrorResponse);
+                                    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                                        handlePaymentSuccessResponse);
+                                    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                                        handleExternalWalletSelected);
+                                    razorpay.open(options);
+                                  },
+                                  child: const Text(
+                                    "Buy Now",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ])
+                      : Container(
+                          height: 50,
+                          width: 200,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: const Color.fromARGB(255, 69, 94, 217)),
+                          child: Center(
+                            child: Text("Go to course"),
+                          ),
+                        )),
             ),
           ],
         ));
+  }
+
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
+    showDialog(
+      barrierColor: Colors.black38,
+      context: context,
+      builder: (context) {
+        return CustomAlertDialog(
+            title: "Payment Failed",
+            description:
+                "Code: ${response.code}\nDescription: ${response.message}");
+      },
+    );
+  }
+
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+    showDialog(
+      barrierColor: Colors.black38,
+      context: context,
+      builder: (context) {
+        return CustomAlertDialog(
+            title: "Payment Success",
+            description:
+                "Code: ${response.orderId}\nDescription: ${response.paymentId}\nSignature : ${response.signature}");
+      },
+    );
+    setState(() {
+      haveBuyed = true;
+    });
+  }
+
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showDialog(
+      barrierColor: Colors.black38,
+      context: context,
+      builder: (context) {
+        return CustomAlertDialog(
+            title: "Wallet used",
+            description: "Wallet Used : ${response.walletName}");
+      },
+    );
   }
 }

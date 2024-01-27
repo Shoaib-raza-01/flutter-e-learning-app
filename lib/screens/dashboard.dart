@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jsdc/screens/chat.dart';
 import 'package:jsdc/screens/course_screen.dart';
 import 'package:jsdc/screens/home_screen.dart';
+import 'package:jsdc/screens/notification_page.dart';
 import 'package:jsdc/screens/profile_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,30 +19,18 @@ class _HomePageState extends State<HomePage> {
   List<Widget> widgetList = const [
     HomeScreen(),
     CourseScreen(),
-    ChatWithUs(),
+    NotificationScreen(),
     ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 207, 203, 190),
-        // action button
-        // floatingActionButton: FloatingActionButton.extended(
-        //   label: Text("hi"),
-        //   onPressed: () {
-        //     print("object");
-        //   },
-        //   icon: Icon(Icons.bolt_rounded),
-        //   backgroundColor: Color.fromARGB(255, 93, 166, 218),
-        //   // child: const Icon(Icons.waving_hand),
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-
+        backgroundColor: Color.fromARGB(255, 45, 45, 45),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
+          backgroundColor: Color.fromARGB(255, 45, 45, 45),
+          foregroundColor: Colors.white,
           actions: [
             IconButton(
                 icon: const Icon(Icons.notifications),
@@ -54,6 +42,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
         ),
         drawer: Drawer(
+          // backgroundColor: const Color.fromARGB(66, 107, 107, 107),
           child: ListView(
             padding: const EdgeInsets.all(0),
             children: [
@@ -138,6 +127,9 @@ class _HomePageState extends State<HomePage> {
           children: widgetList,
         ),
         bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.black26,
+            unselectedItemColor: Colors.white54,
+            selectedItemColor: Colors.white,
             currentIndex: index,
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,

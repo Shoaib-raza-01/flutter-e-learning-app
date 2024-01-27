@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jsdc/components/course_card.dart';
+import 'package:jsdc/components/custom_alert_dialog.dart';
 
 import '../components/category_widget.dart';
 
@@ -12,10 +12,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-      
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(66, 84, 84, 84),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 500,
               width: double.infinity,
-              child:  Padding(
+              child: Padding(
                 padding: EdgeInsets.only(left: 15, top: 20),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: Colors.white,
                         ),
                       ),
 
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               "Share Your Experience",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18),
                             ),
@@ -194,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               "Give your tutor a smile by sharing your experience",
                               style: TextStyle(
-                                  color: Colors.black54,
+                                  color: Colors.white54,
                                   fontStyle: FontStyle.italic,
                                   fontSize: 14),
                             ),
@@ -205,7 +205,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 150,
                             child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    barrierColor: Colors.black26,
+                                    context: context,
+                                    builder: (context) {
+                                      return const CustomAlertDialog(
+                                        title: "Give Feedback",
+                                        description:
+                                            "Thank You for taking out time to write us with your valuable feedback",
+                                      );
+                                    },
+                                  );
+                                },
                                 style: ElevatedButton.styleFrom(
                                     elevation: 10,
                                     backgroundColor: const Color.fromARGB(

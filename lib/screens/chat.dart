@@ -56,12 +56,12 @@ class _ChatWithUsState extends State<ChatWithUs> {
 
     print(response.body);
 
-    // Map<String, dynamic> parsedReponse = json.decode(response.body);
+    Map<String, dynamic> parsedReponse = json.decode(response.body);
 
-    // String reply = parsedReponse['choices'][0]['message']['content'];
+    String reply = parsedReponse['choices'][0]['message']['content'];
 
-    // return reply;
-    return "hii";
+    return reply;
+    // return "hii";
   }
 
   Widget _buildMessage(Message message) {
@@ -87,6 +87,7 @@ class _ChatWithUsState extends State<ChatWithUs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black26,
       body: Column(
         children: <Widget>[
           Expanded(
@@ -115,7 +116,13 @@ class _ChatWithUsState extends State<ChatWithUs> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.send),
-                  onPressed: onSendMessage,
+                  onPressed: () {
+                    try {
+                      onSendMessage();
+                    } catch (e) {
+                      print('Error sending the message');
+                    }
+                  },
                 ),
               ],
             ),
